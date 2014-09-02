@@ -30,10 +30,12 @@ my @tests = ({
 	m => undef,
 	o => { a => 1 },
 	e => { a => 1 },
+	comment => 'undef rule',
 }, {
 	m => '',
 	o => { a => 1 },
 	e => { a => 1 },
+	comment => 'empty rule',
 }, {
 	m => 'a',
 	o => { a => 1, b => 1 },
@@ -112,6 +114,8 @@ my @tests = ({
 
 for my $test (@tests) {
 	my $rule = $test->{m};
+	my $comment = $test->{comment} || $rule;
+
 	my $masked;
 
 	my $ok = eval {
@@ -121,9 +125,9 @@ for my $test (@tests) {
 	};
 	if (!$ok) {
 		diag "Exception: $@";
-		fail $rule;
+		fail $comment;
 	} else {
-		cmp_deeply($masked, $test->{e}, $rule);
+		cmp_deeply($masked, $test->{e}, $comment);
 	}
 }
 

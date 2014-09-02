@@ -6,7 +6,6 @@ use JSON::Mask::Object;
 
 has spec => (
 	is => 'ro',
-	required => 1,
 );
 
 has filter => (
@@ -24,13 +23,24 @@ sub BUILDARGS {
 	return { @args };
 }
 
+sub has_spec {
+	my ($self) = @_;
+	my $spec = $self->spec;
+	return defined $spec && length $spec;
+}
+
 sub BUILD {
 	my ($self) = @_;
-	$self->filter;
+	$self->filter if $self->has_spec;
 }
 
 sub mask {
-	return shift->filter->mask(@_);
+	my ($self, $obj) = @_;
+	if ($self->has_spec) {
+		return $self->filter->mask($obj);
+	} else {
+		return $obj;
+	}
 }
 
 1;
