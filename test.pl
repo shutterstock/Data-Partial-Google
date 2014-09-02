@@ -2,11 +2,10 @@
 use strict;
 use warnings;
 use Data::Printer { class => { expand => 'all', show_methods => 'none' } };
-use JSON::Mask::Parser;
+use JSON::Mask;
 
-my $parser = JSON::Mask::Parser->new;
 while (<>) {
 	chomp;
-	my $val = $parser->parse($_);
-	&p($val);
+	my $mask = JSON::Mask->new($_);
+	&p($mask);
 }

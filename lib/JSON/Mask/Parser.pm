@@ -1,19 +1,21 @@
 package JSON::Mask::Parser;
-use Moo;
 use Marpa::R2;
 
 my $rules = q{
 lexeme default = latm => 1
+:default ::= action => [values]
 
-Props  ::= Prop+ separator => [,] action => [values]
+TopLevel ::= Props action => objectify
 
-Prop   ::= Object action => ::first bless => ::undef
-         | Array  action => ::first bless => ::undef
+Props    ::= Prop+ separator => [,] action => props
 
-Object ::= NAME              action => object
-         | NAME ('/') Object action => object
+Prop     ::= Object action => ::first bless => ::undef
+           | Array  action => ::first bless => ::undef
 
-Array  ::= NAME ('(') Props (')') action => array
+Object   ::= NAME              action => object
+           | NAME ('/') Object action => object
+
+Array    ::= NAME ('(') Props (')') action => array
 
 NAME ~ [^,/()]+
 };
@@ -24,10 +26,10 @@ my $grammar = Marpa::R2::Scanless::G->new({
 });
 
 sub parse {
-	my ($self, $input) = @_;
+	my ($class, $input) = @_;
 
 	my $recognizer = Marpa::R2::Scanless::R->new({
-		semantics_package => ref($self),
+		semantics_package => $class,
 		grammar => $grammar,
 	});
 
@@ -41,20 +43,37 @@ sub parse {
 }
 
 sub array {
-	bless {
-		name => $_[1],
-		properties => $_[2]
-	}, 'JSON::Mask::Array';
+	[
+		$_[1],
+		bless { properties => $_[2] }, 'JSON::Mask::Array',
+	]
 }
 
 sub object {
-	bless {
-		name => $_[1],
-		($_[2] 
-			? (properties => $_[2]) 
-			: ()
-		),
-	}, 'JSON::Mask::Object';
+	[
+		$_[1],
+		bless {
+			($_[2] 
+				? (properties => props({}, $_[2])) 
+				: ()
+			),
+		}, 'JSON::Mask::Object',
+	]
+}
+
+sub props {
+	shift; # Unused global object
+	# Turn [[a, Object], [b, Object], [c, Array]]
+	# into { a => Object, b => Object, c => Array }
+	my $ret = {};
+	for my $object (@_) {
+		$ret->{ $object->[0] } = $object->[1];
+	}
+	return $ret;
+}
+
+sub objectify {
+	bless { properties => $_[1] }, 'JSON::Mask::Object';
 }
 
 1;
