@@ -45,7 +45,7 @@ sub parse {
 sub array {
 	[
 		$_[1],
-		bless { properties => $_[2] }, 'JSON::Mask::Array',
+		bless { properties => $_[2] }, 'JSON::Mask::Object',
 	]
 }
 
