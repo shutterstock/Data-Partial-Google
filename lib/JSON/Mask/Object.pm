@@ -15,14 +15,17 @@ sub mask {
 		return $thing;
 	}
 
-	my $type = reftype $thing;
+	my $type = reftype $thing || '';
 
 	if ($type eq 'ARRAY') {
 		return $self->mask_array($thing);
 	} elsif ($type eq 'HASH') {
 		return $self->mask_hash($thing);
 	} else {
-		croak "Don't know how to mask a '$type' with properties!";
+		# If we're looking for properties on a thing with no internal structure,
+		# don't return it at all. So for example, if we have a/*/b, a might contain
+		# some scalars, we don't want them, we only want things that have bs.
+		return;
 	}
 }
 
