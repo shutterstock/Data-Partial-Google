@@ -2,7 +2,6 @@ package JSON::Mask;
 use Moo;
 
 use JSON::Mask::Parser;
-use JSON::Mask::Array;
 use JSON::Mask::Object;
 
 has spec => (
