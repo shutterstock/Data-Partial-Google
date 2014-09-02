@@ -37,10 +37,18 @@ sub mask_hash {
 
 	for my $key (keys %$props) {
 		my $filter = $props->{$key};
-		my @hash_keys = ($key eq '*' ? keys %$hash : $key);
-		for my $hash_key (@hash_keys) {
-			my $masked = $filter->mask($hash->{$hash_key});
-			$out->{$hash_key} = $masked if defined $masked;
+		if ($key eq '*') {
+			# For * go over all keys in the object, but only produce output keys if the
+			# mask returned something useful.
+			for my $hash_key (keys %$hash) {
+				my $masked = $filter->mask($hash->{$hash_key});
+				$out->{$hash_key} = $masked if defined $masked;
+			}
+		} elsif (exists $hash->{$key}) {
+			my $masked = $filter->mask($hash->{$key});
+			if (defined $masked || !$filter->has_properties) {
+				$out->{$key} = $masked;
+			}
 		}
 	}
 	return $out if keys %$out;
