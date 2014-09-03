@@ -13,7 +13,7 @@ nytprof*
 .DS_Store
 MYMETA.yml
 *.o
-JSON-Mask-*
+Data-Partial-Google-*
 .carton
 local
 carton.lock
