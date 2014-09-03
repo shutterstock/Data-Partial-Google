@@ -13,6 +13,8 @@ has 'properties' => (
 sub mask {
 	my ($self, $thing) = @_;
 
+	# A node without properties is a leaf -- a request to copy
+	# a property, whatever it is.
 	if (!$self->has_properties) {
 		return $thing;
 	}
@@ -60,7 +62,6 @@ sub mask_hash {
 sub mask_array {
 	my ($self, $array) = @_;
 
-	my $props = $self->properties;
 	my @out = map { $self->mask($_) } @$array;
 	return \@out if @out;
 	return;
