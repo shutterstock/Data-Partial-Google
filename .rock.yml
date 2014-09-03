@@ -12,3 +12,9 @@ test: |
 
 prove: |
     dzil run prove ${ROCK_ARGV}
+
+dzil: |
+    exec dzil ${ROCK_ARGV}
+
+look: |
+    exec dzil run bash
