@@ -7,17 +7,10 @@ use Carp;
 
 has 'properties' => (
 	is => 'ro',
-	predicate => 'has_properties',
 );
 
 sub mask {
 	my ($self, $thing) = @_;
-
-	# A node without properties is a leaf -- a request to copy
-	# a property, whatever it is.
-	if (!$self->has_properties) {
-		return $thing;
-	}
 
 	my $type = reftype $thing || '';
 
@@ -45,13 +38,15 @@ sub mask_hash {
 			# For * go over all keys in the object, but only produce output keys if the
 			# mask returned something useful.
 			for my $hash_key (keys %$hash) {
-				my $masked = $filter->mask($hash->{$hash_key});
+				my $masked = $filter ? $filter->mask($hash->{$hash_key}) : $hash->{$hash_key};
 				$out->{$hash_key} = $masked if defined $masked;
 			}
 		} elsif (exists $hash->{$key}) {
-			my $masked = $filter->mask($hash->{$key});
-			if (defined $masked || !$filter->has_properties) {
-				$out->{$key} = $masked;
+			if ($filter) {
+				my $masked = $filter->mask($hash->{$key});
+				$out->{$key} = $masked if defined $masked;
+			} else {
+				$out->{$key} = $hash->{$key};
 			}
 		}
 	}

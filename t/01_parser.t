@@ -7,34 +7,34 @@ use Data::Partial::Google::Parser;
 my $cases = {
 	'a' => {
 		properties => {
-			a => {},
+			a => undef,
 		}
 	},
 	'a,b,c' => {
 		properties => {
-			a => {},
-			b => {},
-			c => {},
+			a => undef,
+			b => undef,
+			c => undef,
 		}
 	},
 	'a,b(d/*/g,b),c' => {
 		properties => {
-			a => {},
+			a => undef,
 			b => {
 				properties => {
 					d => {
 						properties => {
 							'*' => {
 								properties => {
-									g => {},
+									g => undef,
 								}
 							}
 						}
 					},
-					b => {},
+					b => undef,
 				}
 			},
-			c => {},
+			c => undef,
 		}
 	},
 };

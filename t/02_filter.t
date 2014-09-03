@@ -10,26 +10,26 @@ cmp_deeply(
 	$mask->filter,
 	noclass({
 		properties => {
-			a => {},
+			a => undef,
 			b => {
 				properties => {
 					d => {
 						properties => {
 							'*' => {
 								properties => {
-									z => {},
+									z => undef,
 								}
 							}
 						}
 					},
 					b => {
 						properties => {
-							g => {},
+							g => undef,
 						}
 					}
 				}
 			},
-			c => {},
+			c => undef,
 		}
 	}),
 	'filter compiles'

@@ -14,7 +14,7 @@ Props    ::= Prop+ separator => [,] action => props
 Prop     ::= Object action => ::first bless => ::undef
            | Array  action => ::first bless => ::undef
 
-Object   ::= NAME              action => object
+Object   ::= NAME              action => leaf
            | NAME ('/') Object action => object
 
 Array    ::= NAME ('(') Props (')') action => array
@@ -76,6 +76,10 @@ sub object {
 	my $props = $_[2] ? merge_props($_[2]) : undef;
 
 	[ $_[1], make_filter($props) ]
+}
+
+sub leaf {
+	[ $_[1], undef ]
 }
 
 sub array {
