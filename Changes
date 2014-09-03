@@ -1,5 +1,5 @@
 {{$NEXT}}
-	* Working examples.
+	* Improved examples and documentation.
 	* Optimized property access, 33% throughput increase in a simple benchmark.
 	* Supported accessing multiple properties of a descendent property:
 	  foo/bar/baz(one,two,three)

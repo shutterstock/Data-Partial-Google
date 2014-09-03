@@ -87,7 +87,39 @@ parameter, and it is based on the node module "json-mask".
 
 =head1 RULES
 
-XXX write this
+=head2 Properties
+
+Select one or more properties from an object by seprating them with commas:
+
+    foo,bar,baz
+
+=head2 Descendants
+
+Use the slash operator to select properties within properties:
+
+   foo/bar/baz
+
+will return the 'baz' property of the 'bar' property of the 'foo' property.
+
+Arrays are handled transparently: if 'foo' is an array, then the rule
+'bar/baz' will be applied to every entry in 'foo'.
+
+=head2 Sub-selection
+
+Use the parentheses to select specific properties from inside another:
+
+    foo(bar,baz)
+
+selects the 'bar' and 'baz' properties from 'foo' (or from each element in
+'foo').
+
+=head2 Wildcards
+
+Use the asterisk to select all sub-properties of a property:
+
+    foo/*/baz
+
+selects the 'baz' property from every property of 'foo' that has a 'baz'.
 
 =head1 METHODS
 
