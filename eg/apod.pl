@@ -2,10 +2,10 @@
 use strict;
 use warnings;
 use Data::Printer { class => { expand => 'all', show_methods => 'none' } };
-use JSON::Mask;
+use Data::Partial::Google;
 
 my $filter = 'url,object(content,attachments/url)';
-my $mask = JSON::Mask->new($filter);
+my $mask = Data::Partial::Google->new($filter);
 
 &p($mask->filter);
 
