@@ -1,4 +1,7 @@
 package Data::Partial::Google;
+# ABSTRACT: Filter data structures for "partial responses," Google style
+# VERSION
+# AUTHORITY
 use Moo;
 
 use Data::Partial::Google::Parser;
@@ -44,3 +47,67 @@ sub mask {
 }
 
 1;
+
+=head1 SYNOPSIS
+
+    my $data = {
+        artist => "Alice In Chains",
+        title  => "Sap",
+        year   => 1992,
+        tracks => [
+            { title => "Brother",      length => "4:27" },
+            { title => "Got Me Wrong", length => "4:12" },
+            { title => "Right Turn",   length => "3:17" },
+            { title => "Am I Inside",  length => "5:09" },
+        ]
+    };
+
+    my $filter = Data::Filter::Google->new('artist,title,tracks/title');
+    my $filtered = $filter->mask($data);
+
+    cmp_deeply($data, {
+        artist => "Alice In Chains",
+        title  => "Sap",
+        tracks => [
+            { title => "Brother" },
+            { title => "Got Me Wrong" },
+            { title => "Right Turn" },
+            { title => "Am I Inside" },
+        ]
+    });
+
+    # ok 1
+
+=head1 DESCRIPTION
+
+This module filters data structures without changing their shape, making
+it easy to expose only the parts of interest to a consumer. It aims to be
+compatible with Google's implementation of partial responses using the C<fields>
+parameter, and it is based on the node module "json-mask".
+
+=head1 RULES
+
+XXX write this
+
+=head1 METHODS
+
+=head2 mask
+
+C<< $filter->mask($data) >> returns C<$data>, as modified by C<$filter>'s rules.
+In most senses the returned value will be a deep copy of C<$data>, as hashes
+and arrays will have been reconstructed, but other values, such as code
+references and glob references, will be copied directly, so be cautious.
+
+=head1 SEE ALSO
+
+=over 4
+
+=item *
+
+Google Partial Responses: L<https://developers.google.com/discovery/v1/performance#partial-response>
+
+=item *
+
+json-mask: L<https://github.com/nemtsov/json-mask>
+
+=back

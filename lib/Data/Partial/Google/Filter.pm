@@ -1,4 +1,6 @@
 package Data::Partial::Google::Filter;
+# VERSION
+# AUTHORITY
 use Moo;
 use Scalar::Util 'reftype';
 use Carp;

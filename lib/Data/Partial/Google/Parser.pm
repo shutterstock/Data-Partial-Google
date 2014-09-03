@@ -1,4 +1,6 @@
 package Data::Partial::Google::Parser;
+# VERSION
+# AUTHORITY
 use Marpa::R2;
 
 my $rules = q{
