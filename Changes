@@ -1,4 +1,6 @@
 {{$NEXT}}
+	* Working examples.
+	* Optimized property access, 33% throughput increase in a simple benchmark.
 
 Version 0.00_01: 2014-09-03
 	* Initial beta release.
