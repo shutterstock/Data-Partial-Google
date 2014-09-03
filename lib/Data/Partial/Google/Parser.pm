@@ -15,7 +15,7 @@ Prop     ::= Object action => ::first bless => ::undef
            | Array  action => ::first bless => ::undef
 
 Object   ::= NAME              action => leaf
-           | NAME ('/') Object action => object
+           | NAME ('/') Prop   action => object
 
 Array    ::= NAME ('(') Props (')') action => array
 

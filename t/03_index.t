@@ -107,6 +107,17 @@ my @tests = ({
 		},
 	},
 }, {
+	m => 'object/attachments(displayName,url)',
+	o => $fixture,
+	e => {
+		object => {
+			attachments => [{
+				displayName => 'Rick Astley - Never Gonna Give You Up',
+				url => 'http://www.youtube.com/watch?v=dQw4w9WgXcQ',
+			}]
+		}
+	},
+}, {
 	m => 'i',
 	o => [{ i => 1, o => 2 }, { i => 2, o => 2 }],
 	e => [{ i => 1 }, { i => 2 }],
