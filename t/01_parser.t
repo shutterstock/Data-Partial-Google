@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::Most;
-use JSON::Mask::Parser;
+use Data::Partial::Google::Parser;
 
 my $cases = {
 	'a' => {
@@ -41,7 +41,7 @@ my $cases = {
 
 while (my ($rule, $filter) = each %$cases) {
 	cmp_deeply(
-		JSON::Mask::Parser->parse($rule),
+		Data::Partial::Google::Parser->parse($rule),
 		noclass($filter),
 		$rule,
 	);

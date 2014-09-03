@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::Most;
-use JSON::Mask;
+use Data::Partial::Google;
 use JSON::XS ();
 use FindBin;
 
@@ -119,7 +119,7 @@ for my $test (@tests) {
 	my $masked;
 
 	my $ok = eval {
-		my $mask = JSON::Mask->new($rule);
+		my $mask = Data::Partial::Google->new($rule);
 		$masked = $mask->mask($test->{o});
 		1;
 	};

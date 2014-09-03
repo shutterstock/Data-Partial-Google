@@ -1,11 +1,11 @@
-package JSON::Mask::Parser;
+package Data::Partial::Google::Parser;
 use Marpa::R2;
 
 my $rules = q{
 lexeme default = latm => 1
 :default ::= action => [values]
 
-TopLevel ::= Props action => objectify
+TopLevel ::= Props action => toplevel
 
 Props    ::= Prop+ separator => [,] action => props
 
@@ -22,7 +22,7 @@ NAME ~ [^,/()]+
 
 my $grammar = Marpa::R2::Scanless::G->new({
 	source => \$rules,
-	bless_package => 'JSON::Mask',
+	bless_package => 'Data::Partial::Google',
 });
 
 sub parse {
@@ -42,27 +42,17 @@ sub parse {
 	}
 }
 
-sub array {
-	[
-		$_[1],
-		bless { properties => $_[2] }, 'JSON::Mask::Object',
-	]
+sub make_filter {
+	my ($properties) = @_;
+	return bless {
+		($properties
+			? (properties => $properties)
+			: ()
+		)
+	}, 'Data::Partial::Google::Filter';
 }
 
-sub object {
-	[
-		$_[1],
-		bless {
-			($_[2] 
-				? (properties => props({}, $_[2])) 
-				: ()
-			),
-		}, 'JSON::Mask::Object',
-	]
-}
-
-sub props {
-	shift; # Unused global object
+sub merge_props {
 	# Turn [[a, Object], [b, Object], [c, Array]]
 	# into { a => Object, b => Object, c => Array }
 	my $ret = {};
@@ -72,8 +62,23 @@ sub props {
 	return $ret;
 }
 
-sub objectify {
-	bless { properties => $_[1] }, 'JSON::Mask::Object';
+sub toplevel {
+	make_filter($_[1]);
+}
+
+sub props {
+	shift; # Unused global object
+	merge_props(@_);
+}
+
+sub object {
+	my $props = $_[2] ? merge_props($_[2]) : undef;
+
+	[ $_[1], make_filter($props) ]
+}
+
+sub array {
+	[ $_[1], make_filter($_[2]) ]
 }
 
 1;

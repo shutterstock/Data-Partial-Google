@@ -1,4 +1,4 @@
-package JSON::Mask::Object;
+package Data::Partial::Google::Filter;
 use Moo;
 use Scalar::Util 'reftype';
 use Carp;

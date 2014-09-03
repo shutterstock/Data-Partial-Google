@@ -2,9 +2,9 @@
 use strict;
 use warnings;
 use Test::Most;
-use JSON::Mask;
+use Data::Partial::Google;
 
-my $mask = JSON::Mask->new('a,b(d/*/z,b(g)),c');
+my $mask = Data::Partial::Google->new('a,b(d/*/z,b(g)),c');
 
 cmp_deeply(
 	$mask->filter,
