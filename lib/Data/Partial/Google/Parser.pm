@@ -55,13 +55,12 @@ sub make_filter {
 }
 
 sub merge_props {
-	# Turn [[a, Object], [b, Object], [c, Array]]
-	# into { a => Object, b => Object, c => Array }
-	my $ret = {};
-	for my $object (@_) {
-		$ret->{ $object->[0] } = $object->[1];
-	}
-	return $ret;
+	# Turn [[a, Filter], [b, Filter], [c, Filter]]
+	# into { a => Filter, b => Filter, c => Filter }
+	
+	return +{
+		map { @$_ } @_
+	};
 }
 
 sub toplevel {
