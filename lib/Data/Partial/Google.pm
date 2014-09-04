@@ -62,7 +62,7 @@ sub mask {
         ]
     };
 
-    my $filter = Data::Filter::Google->new('artist,title,tracks/title');
+    my $filter = Data::Partial::Google->new('artist,title,tracks/title');
     my $filtered = $filter->mask($data);
 
     cmp_deeply($data, {
